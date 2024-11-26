@@ -121,7 +121,7 @@ const users = async (req, res) => {
 }
 const logout = async (req, res) => {
     try {
-        res.clearCookie('auth');
+        res.clearCookie('token');
         return res.status(200).send({
             success: true,
             message: "User logout successfully",
