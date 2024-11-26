@@ -69,21 +69,19 @@ const login = async (req, res) => {
             {
                 expiresIn: '24h'
             }
-
+            
         );
-       
-
-      res.cookie("token", token, {
+        res.cookie("token", token, {
             httpOnly: true, // Prevents JavaScript access
             secure: false, // Set true in production (requires HTTPS)
             sameSite: "lax",
         });
 
-        return res.json(200).send({
-            success: true,
-            message: "User login successfully",
+        return res.json({ 
+            success: true, 
+            message: `${user.name}Login successful`,
             token: token
-            })
+         })
 
     } catch (error) {
         return res.status(500).send({
