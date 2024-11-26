@@ -1,5 +1,7 @@
 const UserModle = require("../modules/UserModel")
 const jwt = require('jsonwebtoken')
+require ("dotenv").config();
+const bcrypt = require("bcryptjs");
 
 
 
@@ -48,47 +50,108 @@ const register = async (req, res) => {
 
     }
 }
+// const login = async (req, res) => {
+//     try {
+//         const { email, password } = req.body
+//         if (!email || !password) {
+//             return res.status(400).send({
+//                 success: false,
+//                 message: "Email and Password are required"
+//             })
+//         }
+
+//         const user = await UserModle.findOne({ email: email })
+//         if (!user || user.password != password) {
+//             return res.status(400).json({
+//                 success: false,
+//                 message: "Invalid Email or Password"
+//             })
+//         }
+//         const token = await jwt.sign({ user: user }, process.env.JWT_SECRET,
+//             {
+//                 expiresIn: '24h'
+//             }
+            
+//         );
+//         res.cookie("token", token, {
+//             httpOnly: true, // Prevents JavaScript access
+//             secure: true, // Set true in production (requires HTTPS)
+//         });
+
+//         return res.json({ 
+//             success: true, 
+//             message: `${user.name}Login successful`,
+//             token: token
+//          })
+
+//     } catch (error) {
+//         return res.status(500).send({
+//             success: false,
+//             message: error,
+//         })
+//     }
+// }
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const UserModel = require("../models/UserModel"); // Replace with actual model
+
 const login = async (req, res) => {
     try {
-        const { email, password } = req.body
-        if (!email || !password) {
-            return res.status(400).send({
-                success: false,
-                message: "Email and Password are required"
-            })
-        }
+        const { email, password } = req.body;
 
-        const user = await UserModle.findOne({ email: email })
-        if (!user || user.password != password) {
+        // Validate input
+        if (!email || !password) {
             return res.status(400).json({
                 success: false,
-                message: "Invalid Email or Password"
-            })
+                message: "Email and Password are required",
+            });
         }
-        const token = await jwt.sign({ user: user }, "secret-key",
-            {
-                expiresIn: '24h'
-            }
-            
+
+        // Find user by email
+        const user = await UserModel.findOne({ email: email });
+        if (!user) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid Email or Password",
+            });
+        }
+
+        // Compare passwords
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid Email or Password",
+            });
+        }
+
+        // Generate JWT
+        const token = jwt.sign(
+            { userId: user._id }, // Include only necessary info
+            process.env.JWT_SECRET || "secret-key",
+            { expiresIn: "24h" }
         );
+
+        // Set token as a cookie
         res.cookie("token", token, {
             httpOnly: true, // Prevents JavaScript access
-            secure: true, // Set true in production (requires HTTPS)
+            secure: process.env.NODE_ENV === "production", // Set true in production
+            sameSite: "Strict", // Helps prevent CSRF
         });
 
-        return res.json({ 
-            success: true, 
-            message: `${user.name}Login successful`,
-            token: token
-         })
-
+        return res.status(200).json({
+            success: true,
+            message: `${user.name} logged in successfully`,
+        });
     } catch (error) {
-        return res.status(500).send({
+        return res.status(500).json({
             success: false,
-            message: error,
-        })
+            message: "Something went wrong. Please try again later.",
+            error: error.message,
+        });
     }
-}
+};
+
 
 const dashboard =  (req, res) => {
     const token = req.cookies.token;

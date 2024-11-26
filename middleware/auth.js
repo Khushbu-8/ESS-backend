@@ -1,26 +1,43 @@
-const jwt = require('jsonwebtoken')
-require ("dotenv").config();
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
-const veryfyToken = async (req, res, next) => {
-    const token = req.headers.authorization;
-    if (!token) return res.status(403).send({
-        success: false,
-        message: "Blank token"
-    });
-    newtoken = token.slice(7);
-    // console.log(newtoken);
+const verifyToken = async (req, res, next) => {
+    try {
+        const authHeader = req.headers.authorization;
 
-    jwt.verify(newtoken, process.env.JWT_SECRET, (err, user) => {
+        // Check if Authorization header exists
+        if (!authHeader || !authHeader.startsWith("Bearer ")) {
+            return res.status(401).json({
+                success: false,
+                message: "Authorization header missing or malformed",
+            });
+        }
 
-        if (err) return res.status(403).send({
-            success: false,
-            message: "Invalid token"
+        // Extract the token from the "Bearer " prefix
+        const token = authHeader.split(" ")[1];
+
+        // Verify the token
+        jwt.verify(token, process.env.JWT_SECRET || "default-secret-key", (err, decoded) => {
+            if (err) {
+                return res.status(403).json({
+                    success: false,
+                    message: "Invalid or expired token",
+                });
+            }
+
+            // Attach user information from token to the request object
+            req.user = decoded;
+            next(); // Pass control to the next middleware
         });
-        req.user = user;
-        next();
-    })
-}
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Something went wrong during token verification",
+            error: error.message,
+        });
+    }
+};
 
 module.exports = {
-    veryfyToken
-}
+    verifyToken,
+};
