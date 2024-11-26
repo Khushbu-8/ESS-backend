@@ -1,7 +1,5 @@
 const UserModle = require("../modules/UserModel")
 const jwt = require('jsonwebtoken')
-require ("dotenv").config();
-const bcrypt = require("bcryptjs");
 
 
 
@@ -67,7 +65,7 @@ const login = async (req, res) => {
                 message: "Invalid Email or Password"
             })
         }
-        const token = await jwt.sign({ user: user }, process.env.JWT_SECRET,
+        const token = await jwt.sign({ user: user }, "secret-key",
             {
                 expiresIn: '24h'
             }
@@ -75,7 +73,8 @@ const login = async (req, res) => {
         );
         res.cookie("token", token, {
             httpOnly: true, // Prevents JavaScript access
-            secure: true, // Set true in production (requires HTTPS)
+            secure: false, // Set true in production (requires HTTPS)
+            sameSite: "lax",
         });
 
         return res.json({ 
