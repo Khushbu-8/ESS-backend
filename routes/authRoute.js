@@ -6,9 +6,9 @@ const {veryfyToken} = require('../middleware/auth')
 
 
 routes.post('/register',register);
-routes.post('/login',veryfyToken,login );
+routes.post('/login',login );
 routes.get('/dashboard',veryfyToken,dashboard );
-routes.get('/users',veryfyToken,users );
+routes.get('/users',users );
 routes.get('/logout',logout );
 
 module.exports = routes
