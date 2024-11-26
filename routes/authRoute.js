@@ -9,7 +9,7 @@ routes.post('/register',register);
 routes.post('/login',login );
 routes.get('/dashboard',veryfyToken,dashboard );
 routes.get('/users',users );
-routes.get('/logout',veryfyToken,logout );
+routes.post('/logout',logout );
 
 module.exports = routes
 
