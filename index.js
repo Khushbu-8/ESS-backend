@@ -7,13 +7,14 @@ connectDB()
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+app.use(cors())
 
-app.use(cors({ 
-    origin: ["https://ess-admin-kappa.vercel.app"],
-    methods: ["GET", "POST","DELETE","PUT"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
-     }));
+// app.use(cors({ 
+//     origin: ["https://ess-admin-kappa.vercel.app"],
+//     methods: ["GET", "POST","DELETE","PUT"],
+//     allowedHeaders: ["Content-Type", "Authorization"],
+//     credentials: true,
+//      }));
 app.use(express.json());
 
 app.use(cookieParser());
