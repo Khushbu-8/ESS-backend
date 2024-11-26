@@ -124,7 +124,7 @@ const logout = async (req, res) => {
         res.clearCookie('token');
         return res.status(200).send({
             success: true,
-            message: `${req.user.name} User logout successfully`,
+            message: "User logout successfully",
         })
     } catch (error) {
         return res.status(500).send({
