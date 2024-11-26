@@ -73,8 +73,7 @@ const login = async (req, res) => {
         );
         res.cookie("token", token, {
             httpOnly: true, // Prevents JavaScript access
-            secure: false, // Set true in production (requires HTTPS)
-            sameSite: "lax",
+            secure: true, // Set true in production (requires HTTPS)
         });
 
         return res.json({ 
