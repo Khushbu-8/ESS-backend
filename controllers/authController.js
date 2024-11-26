@@ -3,7 +3,6 @@ const jwt = require('jsonwebtoken')
 
 
 
-
 const register = async (req, res) => {
     try {
         const { name, email, password, cpassword, contact, address } = req.body
@@ -79,7 +78,7 @@ const login = async (req, res) => {
 
         return res.json({ 
             success: true, 
-            message: "Login successful" })
+            message: `${req.user.name}Login successful` })
 
     } catch (error) {
         return res.status(500).send({
@@ -125,7 +124,7 @@ const logout = async (req, res) => {
         res.clearCookie('token');
         return res.status(200).send({
             success: true,
-            message: "User logout successfully",
+            message: `${req.user.name} User logout successfully`,
         })
     } catch (error) {
         return res.status(500).send({
