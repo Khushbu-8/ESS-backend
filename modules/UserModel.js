@@ -31,23 +31,18 @@ const userSchema = mongoose.Schema({
     },
     businessCategory : {
         type: Array,
+        required : true
         
       },
     businessName : {
         type : String,
+        required : true
       
     },
     businessAddress : {
         type : String,
+        required : true
        
-    },
-    send_request :{
-        type : String,
-        default:null
-    },
-    received_request:{
-        type : String,
-        default:null
     }
 })
 const user = mongoose.model("user", userSchema);

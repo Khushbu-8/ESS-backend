@@ -40,6 +40,14 @@ const bussinessSchema = mongoose.Schema({
     business_address : {
         type : String,
         required : false
+    },
+    send_request :{
+        type : String,
+        default:null
+    },
+    received_request:{
+        type : String,
+        default:null
     }
 })
 const BussinessCat = mongoose.model("bussinessCategory", bussinessSchema);
