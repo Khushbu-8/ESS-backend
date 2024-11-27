@@ -74,7 +74,8 @@ const login = async (req, res) => {
         res.cookie("token", token, {
             httpOnly: true, // Prevents JavaScript access
             secure: true, // Set true in production (requires HTTPS)
-            sameSite: "none"
+            sameSite: "none",
+            maxAge: 24 * 60 * 60 * 1000 // 24 hours,
         });
 
         return res.json({ 
@@ -84,6 +85,7 @@ const login = async (req, res) => {
          })
 
     } catch (error) {
+        console.log(error,"error in login")
         return res.status(500).send({
             success: false,
             message: error,
@@ -100,6 +102,8 @@ const dashboard =  (req, res) => {
   
     try {
       const decoded = jwt.verify(token, JWT_SECRET);
+      console.log(decoded);
+      
       res.json({ success: true, message: "Welcome to the dashboard", user: decoded });
     } catch (err) {
       res.status(401).json({ success: false, message: "Invalid token" });
