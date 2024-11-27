@@ -1,8 +1,7 @@
 const express = require('express');
-const { register, login, logout, users, dashboard } = require('../controllers/authController');
+const { register, login, logout, users } = require('../controllers/authController');
 
 const routes = express.Router();
-const {veryfyToken} = require('../middleware/auth') 
 
 
 routes.post('/register',register);
