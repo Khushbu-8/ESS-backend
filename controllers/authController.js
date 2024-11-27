@@ -62,11 +62,9 @@ const login = async (req, res) => {
                 message: "Invalid Email or Password"
             })
         }
-      
         return res.json({ 
             success: true, 
-            message: `${user.name} Login successful`,
-            token: token
+            message: `${user.name} Login successful`
          })
 
     } catch (error) {
@@ -77,24 +75,6 @@ const login = async (req, res) => {
         })
     }
 }
-
-const dashboard =  (req, res) => {
-    const token = req.cookies.token;
-  
-    if (!token) {
-      return res.status(401).json({ success: false, message: "Unauthorized" });
-    }
-
-    try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      console.log(decoded, "decoded");
-      
-      res.json({ success: true, message: "Welcome to the dashboard", user: decoded });
-    } catch (err) {
-      res.status(401).json({ success: false, message: "Invalid token" });
-    }
-}
-
 const users = async (req, res) => {
     try {
         const user = await UserModle.find({})
@@ -113,7 +93,7 @@ const users = async (req, res) => {
 }
 const logout = async (req, res) => {
     try {
-        res.clearCookie('token');
+
         return res.status(200).send({
             success: true,
             message: "User logout successfully",
