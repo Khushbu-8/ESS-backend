@@ -71,12 +71,12 @@ const login = async (req, res) => {
             }
             
         );
-        res.cookie("token", token, {
-            httpOnly: true, // Prevents JavaScript access
-            secure: true, // Set true in production (requires HTTPS)
-            sameSite: "none",
-            maxAge: 24 * 60 * 60 * 1000 // 24 hours,
-        });
+        // res.cookie("token", token, {
+        //     httpOnly: true, // Prevents JavaScript access
+        //     secure: true, // Set true in production (requires HTTPS)
+        //     sameSite: "none",
+        //     maxAge: 24 * 60 * 60 * 1000 // 24 hours,
+        // });
 
         return res.json({ 
             success: true, 
