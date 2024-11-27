@@ -62,9 +62,11 @@ const login = async (req, res) => {
                 message: "Invalid Email or Password"
             })
         }
+      
         return res.json({ 
             success: true, 
             message: `${user.name} Login successful`,
+            token: token
          })
 
     } catch (error) {
