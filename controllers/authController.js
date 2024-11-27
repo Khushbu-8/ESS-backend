@@ -65,7 +65,7 @@ const login = async (req, res) => {
                 message: "Invalid Email or Password"
             })
         }
-        const token = await jwt.sign({ user: user }, "secret-key",
+        const token = await jwt.sign({ user: user }, process.env.JWT_SECRET,
             {
                 expiresIn: '24h'
             }
@@ -99,10 +99,10 @@ const dashboard =  (req, res) => {
     if (!token) {
       return res.status(401).json({ success: false, message: "Unauthorized" });
     }
-  
+
     try {
-      const decoded = jwt.verify(token, JWT_SECRET);
-      console.log(decoded);
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      console.log(decoded, "decoded");
       
       res.json({ success: true, message: "Welcome to the dashboard", user: decoded });
     } catch (err) {

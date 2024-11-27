@@ -8,16 +8,21 @@ const veryfyToken = async (req, res, next) => {
         message: "Blank token"
     });
     newtoken = token.slice(7);
-    console.log(newtoken, "newtoken");
-    console.log(req.cookies.token, "cookies");
+    // console.log(newtoken, "newtoken");
+    // console.log(req.cookies.token, "cookies");
     
+console.log(process.env.JWT_SECRET);
 
-    jwt.verify(newtoken, process.env.JWT_SECRET, (err, user) => {
-
+    jwt.verify(newtoken,process.env.JWT_SECRET, (err, user) => {
+        if(err){
+            console.log(err ,"err");
+            
+        }
         if (err) return res.status(403).send({
             success: false,
             message: "Invalid token"
         });
+
         console.log(user ," users");
         
         req.user = user;
