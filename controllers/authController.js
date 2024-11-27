@@ -106,4 +106,4 @@ const logout = async (req, res) => {
     }
 
 }
-module.exports = { register, login, users, logout ,dashboard}
+module.exports = { register, login, users, logout }
