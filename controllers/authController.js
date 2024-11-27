@@ -1,7 +1,4 @@
 const UserModle = require("../modules/UserModel")
-const jwt = require('jsonwebtoken')
-
-
 
 const register = async (req, res) => {
     try {
@@ -65,23 +62,9 @@ const login = async (req, res) => {
                 message: "Invalid Email or Password"
             })
         }
-        const token = await jwt.sign({ user: user }, process.env.JWT_SECRET,
-            {
-                expiresIn: '24h'
-            }
-            
-        );
-        // res.cookie("token", token, {
-        //     httpOnly: true, // Prevents JavaScript access
-        //     secure: true, // Set true in production (requires HTTPS)
-        //     sameSite: "none",
-        //     maxAge: 24 * 60 * 60 * 1000 // 24 hours,
-        // });
-
         return res.json({ 
             success: true, 
-            message: `${user.name}Login successful`,
-            token: token
+            message: `${user.name} Login successful`,
          })
 
     } catch (error) {
